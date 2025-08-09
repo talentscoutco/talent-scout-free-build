@@ -19,9 +19,8 @@ print_help() {
   exit 1
 }
 
-
 echo "Downloading docker-compose.yml..."
-curl -fsSL "$DOCKER_COMPOSE_URL" -o docker-compose.yml || {
+curl -LfsS "$DOCKER_COMPOSE_URL" -o docker-compose.yml || {
   echo "Failed to download docker-compose.yml"
   exit 1
 }
