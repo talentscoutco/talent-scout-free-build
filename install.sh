@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-DOCKER_COMPOSE_URL="https://yourdomain.com/path/to/docker-compose.yml"
+DOCKER_COMPOSE_URL="https://github.com/talentscoutco/talent-scout-free-build/blob/master/docker-compose.yml"
 
 # Check Docker permission
 if ! docker info &>/dev/null; then
