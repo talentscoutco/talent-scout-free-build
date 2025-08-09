@@ -4,11 +4,11 @@ set -e
 DOCKER_COMPOSE_URL="https://raw.githubusercontent.com/talentscoutco/talent-scout-free-build/master/docker-compose.yml"
 
 echo "=== Step 1: Updating system packages ==="
-sudo apt update && sudo apt upgrade -y
+sudo dnf upgrade -y
 
 echo "=== Step 2: Installing Docker ==="
 if ! command -v docker &>/dev/null; then
-  sudo apt install -y docker.io
+  sudo dnf install -y docker
   sudo systemctl enable docker
   sudo systemctl start docker
 else
@@ -26,7 +26,7 @@ fi
 
 echo "=== Step 4: Adding current user to docker group ==="
 sudo usermod -aG docker $USER
-newgrp docker
+newgrp docker || true
 
 # Check Docker permission
 if ! docker info &>/dev/null; then
