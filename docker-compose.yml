@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  backend:
+    image: public.ecr.aws/l9i6b4c6/talentscout/public-ts-backend:latest
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    volumes:
+      - ./storage:/app/storage
+    environment:
+      - SPRING_DATA_MONGODB_URI=${SPRING_DATA_MONGODB_URI}
+      - SPRING_DATA_MONGODB_DATABASE=${SPRING_DATA_MONGODB_DATABASE}
+      - LICENSE_KEY=${LICENSE_KEY}
+      - OPENAI_KEY=${OPENAI_KEY}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - AWS_CV_BUCKET_NAME=${AWS_CV_BUCKET_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - STORAGE_PROVIDER=${STORAGE_PROVIDER}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: public.ecr.aws/l9i6b4c6/talentscout/public-ts-frontend:latest
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+    ports:
+      - "80:80"
+
+volumes:
+  mongo-data:
+  uploaded-files:
